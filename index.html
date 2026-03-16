@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Triplesixxx Gui Documentation</title>
+    <style>
+        @import "tailwindcss";
+        @theme {
+            --color-discord-500: #8f0808;
+            --color-discord-600: #e00f0f;
+        }
+
+        :root {
+            --background: #09090b;
+            --foreground: #fafafa;
+        }
+
+        body {
+            color: var(--foreground);
+            background-color: var(--background);
+            font-family: Arial, Helvetica, sans-serif;
+            background-image:
+                radial-gradient(circle at 50% -20%, rgba(220, 38, 38, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 100% 50%, rgba(153, 27, 27, 0.1) 0%, transparent 40%);
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+            display: flex;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 280px;
+            height: 100vh;
+            background-color: rgba(10, 10, 10, 0.9);
+            border-right: 2px solid var(--color-discord-600);
+            position: fixed;
+            top: 0;
+            left: 0;
+            overflow-y: auto;
+            backdrop-filter: blur(10px);
+            box-shadow: 5px 0 15px rgba(224, 15, 15, 0.4);
+        }
+
+        .sidebar-header {
+            padding: 30px 20px;
+            text-align: center;
+            border-bottom: 1px solid #330000;
+        }
+
+        .sidebar-header h1 {
+            color: var(--color-discord-600);
+            margin: 0;
+            font-size: 24px;
+            text-shadow: 0 0 10px rgba(224, 15, 15, 0.4);
+        }
+
+        .nav-links {
+            list-style: none;
+            padding: 0;
+            margin: 20px 0;
+        }
+
+        .nav-links li {
+            padding: 0;
+        }
+
+        .nav-links a {
+            color: #b0b0b0;
+            text-decoration: none;
+            display: block;
+            padding: 15px 25px;
+            transition: all 0.3s;
+            border-left: 3px solid transparent;
+            font-weight: 500;
+        }
+
+        .nav-links a:hover, .nav-links a.active {
+            background-color: rgba(224, 15, 15, 0.1);
+            color: var(--color-discord-600);
+            border-left-color: var(--color-discord-600);
+            text-shadow: 0 0 5px rgba(224, 15, 15, 0.4);
+        }
+
+        /* Main Content */
+        .content {
+            margin-left: 280px;
+            padding: 50px;
+            width: calc(100% - 280px);
+            min-height: 100vh;
+            box-sizing: border-box;
+        }
+
+        section {
+            background-color: #161616;
+            margin-bottom: 40px;
+            padding: 30px;
+            border-radius: 12px;
+            border: 1px solid #330000;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+            scroll-margin-top: 50px;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeIn 0.6s forwards;
+        }
+
+        @keyframes fadeIn {
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h2 {
+            color: var(--color-discord-600);
+            border-bottom: 2px solid var(--color-discord-600);
+            padding-bottom: 10px;
+            margin-top: 0;
+            display: inline-block;
+        }
+
+        p {
+            line-height: 1.6;
+            color: #b0b0b0;
+        }
+
+        /* Code Block */
+        .code-container {
+            position: relative;
+            background-color: #050505;
+            border-radius: 8px;
+            border: 1px solid #220000;
+            margin: 20px 0;
+            overflow: hidden;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.8);
+        }
+
+        .code-header {
+            background-color: #110000;
+            padding: 8px 15px;
+            font-size: 13px;
+            color: #b0b0b0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #2a0000;
+        }
+
+        .copy-btn {
+            background-color: transparent;
+            color: var(--color-discord-600);
+            border: 1px solid var(--color-discord-600);
+            border-radius: 4px;
+            padding: 4px 10px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.2s;
+        }
+
+        .copy-btn:hover {
+            background-color: var(--color-discord-600);
+            color: white;
+            box-shadow: 0 0 8px rgba(224, 15, 15, 0.4);
+        }
+
+        code {
+            display: block;
+            padding: 20px;
+            font-family: 'Consolas', 'Courier New', Courier, monospace;
+            color: #d8dee9;
+            white-space: pre-wrap;
+            line-height: 1.5;
+            font-size: 14px;
+        }
+
+        .lua-keyword { color: #c678dd; font-weight: bold; }
+        .lua-string { color: #98c379; }
+        .lua-comment { color: #7f848e; font-style: italic; }
+        .lua-func { color: #61afef; }
+        .lua-parameter { color: #d19a66; }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            body { flex-direction: column; }
+            .sidebar { position: static; width: 100%; height: auto; border-right: none; border-bottom: 2px solid var(--color-discord-600); }
+            .content { margin-left: 0; width: 100%; padding: 20px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <h1>Triplesixxx Gui</h1>
+            <p style="margin-top: 10px; font-size: 12px;">Documentation V2.0</p>
+        </div>
+        <ul class="nav-links">
+            <li><a href="#init" class="active">Persiapan & Inisialisasi</a></li>
+            <li><a href="#window">Konfigurasi Window</a></li>
+            <li><a href="#tabs">Tabs & Sections</a></li>
+            <li><a href="#buttons">Buttons & Toggles</a></li>
+            <li><a href="#inputs">Sliders & Inputs</a></li>
+            <li><a href="#dropdowns">Dropdowns</a></li>
+            <li><a href="#visuals">Visuals & AddColor</a></li>
+            <li><a href="#notify">Notification System</a></li>
+        </ul>
+    </div>
+
+    <div class="content">
+
+        <section id="init">
+            <h2>1. Persiapan & Inisialisasi</h2>
+            <p>Untuk memulai menggunakan Library UI TripleSixxx, Anda perlu melakukan <code>loadstring</code> untuk memanggil library utama. Berikut kodenya:</p>
+            
+            <div class="code-container">
+                <div class="code-header">
+                    <span>lua</span>
+                    <button class="copy-btn" onclick="copyCode('code-init')">Copy</button>
+                </div>
+                <code id="code-init"><span class="lua-keyword">local</span> librarytriplesixxx <span class="lua-keyword">=</span> <span class="lua-func">loadstring</span>(<span class="lua-func">game</span>:<span class="lua-func">HttpGet</span>(<span class="lua-string">"https://triplesixxx-xyz.vercel.app/api/647ca5e7/loader.lua"</span>))()</code>
+            </div>
+            <p>Selanjutnya, Anda dapat langsung membuat variabel Window untuk menyimpan GUI Anda.</p>
+        </section>
+
+        <section id="window">
+            <h2>2. Konfigurasi Window (Window Settings)</h2>
+            <p>Konfigurasi `Window` menentukan tampilan awal GUI, termasuk efek salju (rainsnow), warna, folder konfigurasi, dsb.</p>
+            
+            <div class="code-container">
+                <div class="code-header">
+                    <span>lua</span>
+                    <button class="copy-btn" onclick="copyCode('code-window')">Copy</button>
+                </div>
+                <code id="code-window"><span class="lua-keyword">local</span> Window <span class="lua-keyword">=</span> librarytriplesixxx:<span class="lua-func">Window</span>({
+    Icon <span class="lua-keyword">=</span> <span class="lua-string">"rbxassetid://107816383763884"</span>, <span class="lua-comment">-- Ikon header kiri</span>
+    Name <span class="lua-keyword">=</span> <span class="lua-func">addcolor</span>(<span class="lua-string">"Triple"</span>, <span class="lua-parameter">255</span>, <span class="lua-parameter">0</span>, <span class="lua-parameter">0</span>) <span class="lua-keyword">..</span> <span class="lua-string">" sixx | Community"</span>,
+    Subtitle <span class="lua-keyword">=</span> <span class="lua-func">addcolor</span>(<span class="lua-string">"Example Gui"</span>, <span class="lua-parameter">255</span>, <span class="lua-parameter">165</span>, <span class="lua-parameter">0</span>),
+    Version <span class="lua-keyword">=</span> <span class="lua-string">"V 2.0 | NEW UPDATED!"</span>,
+    MarqueeTitle <span class="lua-keyword">=</span> <span class="lua-string">"Subtitle"</span>, <span class="lua-comment">-- "Name" atau "Subtitle" akan berjalan mengetik</span>
+    Color <span class="lua-keyword">=</span> Color3.<span class="lua-func">fromRGB</span>(<span class="lua-parameter">255</span>, <span class="lua-parameter">0</span>, <span class="lua-parameter">0</span>), <span class="lua-comment">-- Warna aksen utama</span>
+    Background <span class="lua-keyword">=</span> <span class="lua-string">"rainsnow"</span>, <span class="lua-comment">-- Efek salju di panel belakang</span>
+    makeconfig <span class="lua-keyword">=</span> <span class="lua-string">"Triplesixxx/Saved"</span>, <span class="lua-comment">-- Lokasi custom pembuat folder config lokal</span>
+    SnowColor <span class="lua-keyword">=</span> Color3.<span class="lua-func">fromRGB</span>(<span class="lua-parameter">255</span>, <span class="lua-parameter">255</span>, <span class="lua-parameter">255</span>),
+    SnowSpeed <span class="lua-keyword">=</span> <span class="lua-parameter">1</span>,
+    SnowSize <span class="lua-keyword">=</span> <span class="lua-parameter">3</span>,
+    SnowDirection <span class="lua-keyword">=</span> <span class="lua-string">"Vertical"</span>, <span class="lua-comment">-- Bisa "Vertical", "Horizontal Left", "Horizontal Right"</span>
+    Keybind <span class="lua-keyword">=</span> Enum.KeyCode.RightControl
+})</code>
+            </div>
+        </section>
+
+        <section id="tabs">
+            <h2>3. Tabs & Sections</h2>
+            <p>Untuk mengelompokkan elemen UI Anda, buatlah `Tab`, lalu tambahkan `Section` di dalamnya.</p>
+            
+            <div class="code-container">
+                <div class="code-header">
+                    <span>lua</span>
+                    <button class="copy-btn" onclick="copyCode('code-tabs')">Copy</button>
+                </div>
+                <code id="code-tabs"><span class="lua-keyword">local</span> MainTab <span class="lua-keyword">=</span> Window:<span class="lua-func">AddTab</span>({
+    Name <span class="lua-keyword">=</span> <span class="lua-string">"Utama"</span>,
+    Icon <span class="lua-keyword">=</span> <span class="lua-string">"home"</span> <span class="lua-comment">-- Bisa menggunakan icon lucide atau ID rbxasset</span>
+})
+
+<span class="lua-keyword">local</span> MainSection <span class="lua-keyword">=</span> MainTab:<span class="lua-func">AddSection</span>(<span class="lua-string">"Fitur Pertarungan"</span>)</code>
+            </div>
+        </section>
+
+        <section id="buttons">
+            <h2>4. Buttons, Toggles, & Panels</h2>
+            <p>Tombol untuk melakukan aksi ekseskusi, dan Toggle untuk aksi yang dapat diaktifkan/matikan (menyimpan opsi config otomatis).</p>
+            
+            <div class="code-container">
+                <div class="code-header">
+                    <span>lua</span>
+                    <button class="copy-btn" onclick="copyCode('code-btn')">Copy</button>
+                </div>
+                <code id="code-btn"><span class="lua-comment">-- Tombol Biasa</span>
+MainSection:<span class="lua-func">AddButton</span>({
+    Title <span class="lua-keyword">=</span> <span class="lua-string">"Klik Saya!"</span>,
+    Callback <span class="lua-keyword">=</span> <span class="lua-keyword">function</span>()
+        <span class="lua-func">Notify</span>(<span class="lua-string">"Tombol Ditekan!"</span>)
+    <span class="lua-keyword">end</span>
+})
+
+<span class="lua-comment">-- Toggle Switch</span>
+MainSection:<span class="lua-func">AddToggle</span>({
+    Title <span class="lua-keyword">=</span> <span class="lua-string">"Auto Farm"</span>,
+    Default <span class="lua-keyword">=</span> <span class="lua-keyword">false</span>, <span class="lua-comment">-- otomatis load data sebelumnya jika ada di folder</span>
+    Content <span class="lua-keyword">=</span> <span class="lua-string">"Menyala otomatis hajar monster."</span>,
+    Callback <span class="lua-keyword">=</span> <span class="lua-keyword">function</span>(v)
+        <span class="lua-func">print</span>(<span class="lua-string">"Toggle is now "</span>, v)
+    <span class="lua-keyword">end</span>
+})
+
+<span class="lua-comment">-- Panel dengan Kolom Teks dan Eksekusi Callback</span>
+MainSection:<span class="lua-func">AddPanel</span>({
+    Title <span class="lua-keyword">=</span> <span class="lua-string">"Code Execution"</span>,
+    Placeholder <span class="lua-keyword">=</span> <span class="lua-string">"Teks Disini..."</span>,
+    Button <span class="lua-keyword">=</span> <span class="lua-string">"Mulai"</span>,
+    SubButton <span class="lua-keyword">=</span> <span class="lua-string">"Hentikan"</span>,
+    Callback <span class="lua-keyword">=</span> <span class="lua-keyword">function</span>(text) <span class="lua-func">print</span>(<span class="lua-string">"Start: "</span> <span class="lua-keyword">..</span> text); <span class="lua-keyword">end</span>,
+    SubCallback <span class="lua-keyword">=</span> <span class="lua-keyword">function</span>() <span class="lua-func">print</span>(<span class="lua-string">"Stop button pressed"</span>); <span class="lua-keyword">end</span>
+})</code>
+            </div>
+        </section>
+
+        <section id="inputs">
+            <h2>5. Sliders & Text Inputs</h2>
+            <p>Slider biasa digunakan untuk mengatur nilai, dan Text Input untuk mengisi data string atau angka tunggal yang akan di simpan.</p>
+            
+            <div class="code-container">
+                <div class="code-header">
+                    <span>lua</span>
+                    <button class="copy-btn" onclick="copyCode('code-inp')">Copy</button>
+                </div>
+                <code id="code-inp"><span class="lua-comment">-- Slider</span>
+MainSection:<span class="lua-func">AddSlider</span>({
+    Title <span class="lua-keyword">=</span> <span class="lua-string">"WalkSpeed"</span>,
+    Min <span class="lua-keyword">=</span> <span class="lua-parameter">16</span>,
+    Max <span class="lua-keyword">=</span> <span class="lua-parameter">300</span>,
+    Default <span class="lua-keyword">=</span> <span class="lua-parameter">50</span>,
+    Increment <span class="lua-keyword">=</span> <span class="lua-parameter">1</span>,
+    Content <span class="lua-keyword">=</span> <span class="lua-string">"Kecepatan berjalan"</span>,
+    Callback <span class="lua-keyword">=</span> <span class="lua-keyword">function</span>(val)
+        game.Players.LocalPlayer.Character.Humanoid.WalkSpeed <span class="lua-keyword">=</span> val
+    <span class="lua-keyword">end</span>
+})
+
+<span class="lua-comment">-- Input Box</span>
+MainSection:<span class="lua-func">AddInput</span>({
+    Title <span class="lua-keyword">=</span> <span class="lua-string">"JumpPower (Hack)"</span>,
+    Placeholder <span class="lua-keyword">=</span> <span class="lua-string">"50"</span>,
+    Default <span class="lua-keyword">=</span> <span class="lua-string">"50"</span>,
+    Callback <span class="lua-keyword">=</span> <span class="lua-keyword">function</span>(textValue)
+        <span class="lua-func">print</span>(<span class="lua-string">"Jump set to: "</span> <span class="lua-keyword">..</span> textValue)
+    <span class="lua-keyword">end</span>
+})</code>
+            </div>
+        </section>
+
+        <section id="dropdowns">
+            <h2>6. Dropdowns</h2>
+            <p>Cocok untuk seleksi tipe lokasi teleportasi, mode serangan, dll. Mendukung Multi-seleksi (memilih lebih dari satu item).</p>
+            
+            <div class="code-container">
+                <div class="code-header">
+                    <span>lua</span>
+                    <button class="copy-btn" onclick="copyCode('code-dd')">Copy</button>
+                </div>
+                <code id="code-dd">MainSection:<span class="lua-func">AddDropdown</span>({
+    Title <span class="lua-keyword">=</span> <span class="lua-string">"Teleport Area"</span>,
+    Options <span class="lua-keyword">=</span> {<span class="lua-string">"Spawn"</span>, <span class="lua-string">"Shop"</span>, <span class="lua-string">"Arena"</span>},
+    Default <span class="lua-keyword">=</span> <span class="lua-string">"Spawn"</span>,
+    Content <span class="lua-keyword">=</span> <span class="lua-string">"Pilih tempat favorit"</span>,
+    Callback <span class="lua-keyword">=</span> <span class="lua-keyword">function</span>(val)
+        <span class="lua-func">Notify</span>(<span class="lua-string">"Teleporting to: "</span> <span class="lua-keyword">..</span> val)
+    <span class="lua-keyword">end</span>
+})</code>
+            </div>
+        </section>
+
+        <section id="visuals">
+            <h2>7. Customisasi Visual (Images, Colors, addcolor)</h2>
+            <p>Berbagai komponen pendukung seperti Pembatas Garis, Image Label, Custom Color Picker, dan Fungsi pembuat font berwarna `addcolor`.</p>
+            
+            <div class="code-container">
+                <div class="code-header">
+                    <span>lua</span>
+                    <button class="copy-btn" onclick="copyCode('code-vs')">Copy</button>
+                </div>
+                <code id="code-vs"><span class="lua-comment">-- Pembatas Garis Berclear Gradient</span>
+MainSection:<span class="lua-func">AddDivider</span>()
+
+<span class="lua-comment">-- Memunculkan Image khusus berukuran besar di Frame</span>
+MainSection:<span class="lua-func">addrbxasset</span>(<span class="lua-string">"rbxassetid://14204231522, name = Foto Profil"</span>)
+
+<span class="lua-comment">-- Color Picker Biasa (Ada Palet Default)</span>
+MainSection:<span class="lua-func">AddColorPicker</span>({
+    Title <span class="lua-keyword">=</span> <span class="lua-string">"Highlight ESP Color"</span>,
+    Default <span class="lua-keyword">=</span> Color3.<span class="lua-func">fromRGB</span>(<span class="lua-parameter">255</span>, <span class="lua-parameter">0</span>, <span class="lua-parameter">0</span>),
+    Callback <span class="lua-keyword">=</span> <span class="lua-keyword">function</span>(color3)
+        <span class="lua-func">print</span>(<span class="lua-string">"Warna baru dipilih!"</span>)
+    <span class="lua-keyword">end</span>
+})
+
+<span class="lua-comment">-- FUNGSI GLOBAL addcolor(text, R, G, B) -- Sangat Berguna!</span>
+<span class="lua-keyword">local</span> TeksKeren <span class="lua-keyword">=</span> <span class="lua-func">addcolor</span>(<span class="lua-string">"MERAH!!"</span>, <span class="lua-parameter">255</span>, <span class="lua-parameter">0</span>, <span class="lua-parameter">0</span>)
+<span class="lua-func">Notify</span>(TeksKeren) <span class="lua-comment">-- akan mengeluarkan teks MERAH!! berwarna merah sungguhan di UI</span></code>
+            </div>
+        </section>
+
+        <section id="notify">
+            <h2>8. Sistem Notifikasi (Notify)</h2>
+            <p>Fitur notifikasi terbaru yang mensupport Ikon bebas, RichText berwarna, dan transisi UI yang tidak akan menutupi atau crash.</p>
+            
+            <div class="code-container">
+                <div class="code-header">
+                    <span>lua</span>
+                    <button class="copy-btn" onclick="copyCode('code-notif')">Copy</button>
+                </div>
+                <code id="code-notif"><span class="lua-comment">-- Pemanggilan Basic</span>
+<span class="lua-func">Notify</span>(<span class="lua-string">"Operasi berhasil!"</span>, <span class="lua-parameter">3</span> <span class="lua-comment">--[[delay timeout]]</span>, Color3.<span class="lua-func">fromRGB</span>(<span class="lua-parameter">0</span>,<span class="lua-parameter">255</span>,<span class="lua-parameter">0</span>), <span class="lua-string">"Sukses"</span>, <span class="lua-string">"System"</span>)
+
+<span class="lua-comment">-- Pemanggilan Lanjutan menggunakan Tabel (Direkomendasikan)</span>
+librarytriplesixxx:<span class="lua-func">MakeNotify</span>({
+    Title <span class="lua-keyword">=</span> <span class="lua-func">addcolor</span>(<span class="lua-string">"Peringatan!"</span>, <span class="lua-parameter">255</span>, <span class="lua-parameter">0</span>, <span class="lua-parameter">0</span>),
+    Description <span class="lua-keyword">=</span> <span class="lua-string">" Server Warning"</span>,
+    Content <span class="lua-keyword">=</span> <span class="lua-string">"Banned terdeteksi, bersiap keluar..."</span>,
+    Icon <span class="lua-keyword">=</span> <span class="lua-string">"rbxassetid://107816383763884"</span>, <span class="lua-comment">-- atau icon string "home", "eyes"</span>
+    Time <span class="lua-keyword">=</span> <span class="lua-parameter">4</span>, <span class="lua-comment">-- Durasi Muncul</span>
+    Delay <span class="lua-keyword">=</span> <span class="lua-parameter">6</span> <span class="lua-comment">-- Durasi Bertahan</span>
+})</code>
+            </div>
+        </section>
+
+    </div>
+
+    <script>
+        const sections = document.querySelectorAll('section');
+        const navLinks = document.querySelectorAll('.nav-links a');
+
+        window.addEventListener('scroll', () => {
+            let current = '';
+
+            sections.forEach(sec => {
+                const sectionTop = sec.offsetTop;
+                if (pageYOffset >= sectionTop - 150) {
+                    current = sec.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href').substring(1) === current) {
+                    link.classList.add('active');
+                }
+            });
+        });
+
+        function copyCode(idElement) {
+            const el = document.getElementById(idElement);
+            navigator.clipboard.writeText(el.innerText).then(() => {
+                const button = el.previousElementSibling.querySelector('.copy-btn');
+                const oldText = button.innerText;
+                button.innerText = 'Copied!';
+                button.style.backgroundColor = 'var(--red-main)';
+                button.style.color = 'white';
+                setTimeout(() => {
+                    button.innerText = oldText;
+                    button.style.backgroundColor = 'transparent';
+                    button.style.color = 'var(--red-main)';
+                }, 2000);
+            });
+        }
+    </script>
+</body>
+</html>
